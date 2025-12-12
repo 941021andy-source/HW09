@@ -1,33 +1,181 @@
+/* --- 柔和粉彩背景 --- */
 body {
     font-family: "Microsoft JhengHei", sans-serif;
     text-align: center;
-    background-color: #f2f2f2;
-    }
-    h1 {
-    color: #333;
-    }
-     .board {
-         width: 300px;
-         height: 300px;
-         margin: 20px auto;
-         display: grid;
-         grid-template-columns: repeat(3, 1fr);
-         grid-template-rows: repeat(3, 1fr);
-         gap: 5px;
-         }
-         .cell {
-             background-color: white;
-             border: 2px solid #888;
-             font-size: 2em;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             cursor: pointer;
-             transition: background-color 0.3s;
-             }
-             .cell:hover {
-                 background-color: #e0e0e0;
-                 }
-                 .controls {
-                 margin-top: 10px;
-                 }
+    margin: 0;
+    padding: 0;
+
+    background: linear-gradient(135deg, #f9e8ff, #e8f3ff, #f7fff0);
+    background-attachment: fixed;
+
+    color: #555;
+}
+
+/* --- 柔光標題 --- */
+h1 {
+    margin-top: 25px;
+    font-size: 2.4em;
+    font-weight: bold;
+    color: #6b6b8e;
+
+    text-shadow:
+        0 0 8px rgba(200, 200, 255, 0.4),
+        0 0 16px rgba(180, 180, 255, 0.2);
+}
+
+/* --- 狀態列：柔和玻璃卡片 --- */
+#status {
+    margin-top: 12px;
+    padding: 12px 24px;
+    font-size: 1.3em;
+    font-weight: bold;
+
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(200, 200, 200, 0.35);
+
+    color: #5f5f7a;
+
+    box-shadow:
+        0 4px 12px rgba(150, 150, 150, 0.18),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* --- 棋盤：柔霧玻璃面板 --- */
+.board {
+    width: 340px;
+    height: 340px;
+    margin: 30px auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 22px;
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(220, 220, 220, 0.4);
+    box-shadow:
+        0 6px 20px rgba(120, 120, 120, 0.18),
+        inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* --- 柔光格子 --- */
+/* --- 漂亮、不會動的柔和格子 --- */
+.cell {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 16px;
+
+    border: 1px solid rgba(210, 210, 220, 0.55);
+
+    /* 柔和陰影讓格子更有質感 */
+    box-shadow:
+        0 3px 8px rgba(150, 150, 150, 0.18),
+        inset 0 0 12px rgba(255, 255, 255, 0.7);
+
+    font-size: 3em;
+    font-weight: bold;
+    color: #6f6f92;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    user-select: none;
+
+    /* 完全移除放大、縮小、位移效果 */
+    transition: none;
+}
+
+/* hover 不要動，只改顏色讓使用者知道可點 */
+.cell:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* active（點下去）也不會動 */
+.cell:active {
+    transform: none;
+}
+
+
+/* --- 柔光按鈕 --- */
+.controls button {
+    margin-top: 18px;
+    padding: 12px 28px;
+
+    font-size: 1.2em;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.5);
+    color: #5d5d78;
+
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(200, 200, 200, 0.35);
+
+    box-shadow:
+        0 4px 10px rgba(150, 150, 150, 0.25),
+        inset 0 0 10px rgba(255, 255, 255, 0.6);
+
+    transition: 0.25s ease;
+}
+
+.controls button:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-4px);
+}
+
+.controls button:active {
+    transform: translateY(0);
+}
+/* --- 完全靜態的漂亮柔和格子 --- */
+.cell {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 16px;
+
+    border: 1px solid rgba(200, 200, 200, 0.5);
+
+    box-shadow:
+        0 3px 8px rgba(150, 150, 150, 0.18),
+        inset 0 0 12px rgba(255, 255, 255, 0.8);
+
+    font-size: 3em;
+    font-weight: bold;
+    color: #6b6b8e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    user-select: none;
+
+    /* 🔥🔥🔥 完全取消所有動態效果 🔥🔥🔥 */
+    transition: none !important;
+    transform: none !important;
+}
+
+/* hover 不會動，只是微亮 */
+.cell:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 3px 8px rgba(150, 150, 150, 0.25),
+        inset 0 0 12px rgba(255, 255, 255, 0.9);
+
+    /* 絕對不能動 */
+    transform: none !important;
+}
+
+/* 點下去也不會動 */
+.cell:active {
+    transform: none !important;
+}
