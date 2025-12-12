@@ -5,44 +5,55 @@ body {
     margin: 0;
     padding: 0;
 
-    background: linear-gradient(135deg, #f9e8ff, #e8f3ff, #f7fff0);
+    /* 優化：將顏色設為 CSS 變數，方便未來調整 */
+    --pastel-lightest: #f7fff0; /* 淺綠/白 */
+    --pastel-light: #e8f3ff;    /* 淺藍 */
+    --pastel-medium: #f9e8ff;   /* 淺紫/粉 */
+    --text-color-dark: #5f5f7a; /* 深灰藍 (主要文字) */
+    --text-color-accent: #6b6b8e; /* 更深的紫灰 (標題/格子符號) */
+
+    background: linear-gradient(135deg, var(--pastel-medium), var(--pastel-light), var(--pastel-lightest));
     background-attachment: fixed;
 
-    color: #555;
+    color: var(--text-color-dark);
 }
 
-/* --- 柔光標題 --- */
+/* --- 柔光標題 (H1) --- */
 h1 {
     margin-top: 25px;
     font-size: 2.4em;
     font-weight: bold;
-    color: #6b6b8e;
+    color: var(--text-color-accent);
 
+    /* 柔和的藍紫色光暈效果 */
     text-shadow:
-        0 0 8px rgba(200, 200, 255, 0.4),
-        0 0 16px rgba(180, 180, 255, 0.2);
+        0 0 10px rgba(180, 180, 255, 0.6), /* 強化外發光 */
+        0 0 20px rgba(150, 150, 255, 0.3);
 }
 
-/* --- 狀態列：柔和玻璃卡片 --- */
+/* --- 狀態列：柔和玻璃卡片 (#status) --- */
 #status {
-    margin-top: 12px;
+    margin: 12px auto 0; /* 使用 auto 確保居中，讓樣式更穩健 */
+    max-width: 400px;    /* 限制最大寬度，避免過寬 */
     padding: 12px 24px;
     font-size: 1.3em;
     font-weight: bold;
 
+    /* 玻璃擬態基礎 */
     background: rgba(255, 255, 255, 0.55);
     border-radius: 16px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(200, 200, 200, 0.35);
 
-    color: #5f5f7a;
+    color: var(--text-color-dark);
 
+    /* 柔和陰影與內發光 */
     box-shadow:
         0 4px 12px rgba(150, 150, 150, 0.18),
         inset 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-/* --- 棋盤：柔霧玻璃面板 --- */
+/* --- 棋盤：柔霧玻璃面板 (.board) --- */
 .board {
     width: 340px;
     height: 340px;
@@ -54,32 +65,40 @@ h1 {
 
     padding: 18px;
 
+    /* 玻璃擬態基礎 */
     background: rgba(255, 255, 255, 0.45);
     border-radius: 22px;
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px); /* 略微強化模糊效果 */
 
     border: 1px solid rgba(220, 220, 220, 0.4);
+    /* 柔和陰影與內發光 */
     box-shadow:
-        0 6px 20px rgba(120, 120, 120, 0.18),
-        inset 0 0 15px rgba(255, 255, 255, 0.3);
+        0 8px 25px rgba(100, 100, 100, 0.2), /* 稍微加大外部陰影，讓棋盤更突出 */
+        inset 0 0 15px rgba(255, 255, 255, 0.35); /* 強化內發光 */
 }
 
-/* --- 柔光格子 --- */
-/* --- 漂亮、不會動的柔和格子 --- */
+/* --- 柔光格子 (.cell) --- */
+/*
+  🎯 目標：合併兩次定義，確保靜態、漂亮、柔和的視覺效果。
+  transition: none !important; 和 transform: none !important; 可以刪除，
+  因為元素預設就沒有 transition 或 transform，除非被其他樣式覆蓋。
+*/
 .cell {
-    background: rgba(255, 255, 255, 0.7);
+    /* 格子主體 */
+    background: rgba(255, 255, 255, 0.75);
     border-radius: 16px;
-
-    border: 1px solid rgba(210, 210, 220, 0.55);
+    border: 1px solid rgba(200, 200, 200, 0.5);
 
     /* 柔和陰影讓格子更有質感 */
     box-shadow:
         0 3px 8px rgba(150, 150, 150, 0.18),
-        inset 0 0 12px rgba(255, 255, 255, 0.7);
+        inset 0 0 12px rgba(255, 255, 255, 0.8);
 
-    font-size: 3em;
+    /* 內容排版 */
+    font-size: 3.2em; /* 稍微放大符號 */
     font-weight: bold;
-    color: #6f6f92;
+    color: var(--text-color-accent);
+    line-height: 1; /* 確保 X/O 垂直置中 */
 
     display: flex;
     align-items: center;
@@ -88,24 +107,34 @@ h1 {
     cursor: pointer;
     user-select: none;
 
-    /* 完全移除放大、縮小、位移效果 */
-    transition: none;
+    /* 🚨 保持靜態：避免被任何地方的 transition 影響 */
+    transition: background 0.2s ease-out, box-shadow 0.2s ease-out; /* 僅針對顏色和陰影做柔和的過渡 */
+    transform: none; /* 確保沒有位移 */
 }
 
-/* hover 不要動，只改顏色讓使用者知道可點 */
+/* hover 效果：微亮，但不會動 */
 .cell:hover {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.95); /* 讓它更亮 */
+    box-shadow:
+        0 3px 10px rgba(150, 150, 150, 0.3), /* 輕微強化的外部陰影 */
+        inset 0 0 15px rgba(255, 255, 255, 1); /* 內發光更明顯 */
+
+    transform: none; /* 絕對不能動 */
 }
 
-/* active（點下去）也不會動 */
+/* 點下去效果：輕微下沉視覺回饋，但不位移 */
 .cell:active {
-    transform: none;
+    box-shadow:
+        0 1px 4px rgba(150, 150, 150, 0.1), /* 模擬按壓時外部陰影變小 */
+        inset 0 0 18px rgba(255, 255, 255, 1); /* 強化內發光 */
+    background: rgba(255, 255, 255, 0.85);
+    transform: none; /* 絕對不能動 */
 }
 
 
-/* --- 柔光按鈕 --- */
+/* --- 柔光按鈕 (.controls button) --- */
 .controls button {
-    margin-top: 18px;
+    margin: 18px 8px 0; /* 增加左右間距 */
     padding: 12px 28px;
 
     font-size: 1.2em;
@@ -114,68 +143,35 @@ h1 {
     border: none;
     border-radius: 14px;
 
+    /* 玻璃擬態基礎 */
     background: rgba(255, 255, 255, 0.5);
-    color: #5d5d78;
+    color: var(--text-color-dark);
 
     cursor: pointer;
     backdrop-filter: blur(6px);
 
     border: 1px solid rgba(200, 200, 200, 0.35);
 
+    /* 柔和陰影與內發光 */
     box-shadow:
         0 4px 10px rgba(150, 150, 150, 0.25),
         inset 0 0 10px rgba(255, 255, 255, 0.6);
 
-    transition: 0.25s ease;
+    /* 優化過渡：只針對 transform 和 box-shadow，讓 hover 更流暢 */
+    transition: transform 0.2s ease-out, background 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .controls button:hover {
-    background: rgba(255, 255, 255, 0.8);
-    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.85); /* 強化 hover 亮度 */
+    transform: translateY(-4px); /* 保留這個柔和的上升效果 */
+    box-shadow:
+        0 6px 15px rgba(100, 100, 100, 0.3), /* 讓陰影跟著放大 */
+        inset 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 .controls button:active {
-    transform: translateY(0);
-}
-/* --- 完全靜態的漂亮柔和格子 --- */
-.cell {
-    background: rgba(255, 255, 255, 0.75);
-    border-radius: 16px;
-
-    border: 1px solid rgba(200, 200, 200, 0.5);
-
+    transform: translateY(-1px); /* 輕微下壓，但比 -4px 高一點 */
     box-shadow:
-        0 3px 8px rgba(150, 150, 150, 0.18),
-        inset 0 0 12px rgba(255, 255, 255, 0.8);
-
-    font-size: 3em;
-    font-weight: bold;
-    color: #6b6b8e;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-    user-select: none;
-
-    /* 🔥🔥🔥 完全取消所有動態效果 🔥🔥🔥 */
-    transition: none !important;
-    transform: none !important;
-}
-
-/* hover 不會動，只是微亮 */
-.cell:hover {
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow:
-        0 3px 8px rgba(150, 150, 150, 0.25),
-        inset 0 0 12px rgba(255, 255, 255, 0.9);
-
-    /* 絕對不能動 */
-    transform: none !important;
-}
-
-/* 點下去也不會動 */
-.cell:active {
-    transform: none !important;
+        0 2px 5px rgba(100, 100, 100, 0.2),
+        inset 0 0 15px rgba(255, 255, 255, 0.9); /* 強化內發光模擬按壓 */
 }
